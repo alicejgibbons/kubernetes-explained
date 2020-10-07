@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-gif-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cat-gif-app
+  template:
+    metadata:
+      labels:
+        app: cat-gif-app
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: cat-gif-app
+        image: kubernetesexplainedacr.azurecr.io/demo/cat-gif-app:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cat-gif-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 5000
+  selector:
+    app: cat-gif-app
